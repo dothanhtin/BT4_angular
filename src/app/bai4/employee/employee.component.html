@@ -1,0 +1,66 @@
+<mat-toolbar>
+    <span>{{service.form.controls['$key'].value?"Modify Model":"New Model"}}</span>
+    <span class="fill-remaining-space"></span>
+    <button class="btn-dialog-close" mat-stroked-button (click)="onClose()" tabIndex="-1"><mat-icon>clear</mat-icon></button>
+  </mat-toolbar>
+<form [formGroup]='service.form' class='normal-form' (submit)="onSubmit()">
+    <mat-grid-list cols="1" rowHeight="540px">
+        <mat-grid-tile>
+            <div class= "controles-container">
+                <input type="hidden" formControlName="$key"/>
+                <mat-form-field>
+                    <input formControlName="code" matInput placeholder="code*"/>
+                    <input type="hidden" formControlName="id"/>
+                    <mat-error>This field is not empty or contains special characters</mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                    <input formControlName="name" matInput placeholder="name*">
+                    <mat-error>This field is not empty or contains special characters</mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                    <input formControlName="birthday" matInput [matDatepicker]="picker" placeholder="birthday*"/>
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field>
+                    <input formControlName="address" matInput placeholder="address"/>
+                </mat-form-field>
+                <mat-form-field>
+                    <input formControlName="email" matInput placeholder="email*"/>
+                    <mat-error>This field is not empty and have right email format</mat-error>
+                </mat-form-field>
+                <!-- <mat-form-field>
+                    <input formControlName="image" matInput placeholder="image">
+                </mat-form-field> -->
+                <img [src]="service.form.controls.image.value" style="width:50px;height:50px" *ngIf="service.form.controls.image.value!='' && service.form.controls.image.value!=undefined"/>
+                <div style="text-align:center; margin-top: 10px; "><mat-card style="margin-top:10px; width: 95%;">  
+                    <mat-card-content>  
+                        <ul>  
+                            <li *ngFor="let item of uploader.queue">  
+                                <mat-progress-bar [value]="item.progress"></mat-progress-bar>  
+                                <span id="file-label">  
+                                    {{ item?.file?.name }}
+                                </span>  
+                            </li>  
+                        </ul>  
+                    </mat-card-content>  
+                    <mat-card-actions> 
+                        <button mat-button color="warn" (click)="onClick()" type="button">  
+                            <mat-icon>file_upload</mat-icon>  
+                            Upload  
+                        </button>  
+                        <input type="file" #file id="file" name="file" multiple="none" accept=".png,.jpg,.jpeg" ng2FileSelect [uploader]="uploader"/>
+                        <mat-error *ngIf="uploader.queue.length!=1 || ( uploader.queue[0]!= undefined && !uploader.queue[0]._file.name.endsWith('.jpg') && !uploader.queue[0]._file.name.endsWith('.jpeg') && !uploader.queue[0]._file.name.endsWith('.png'))">Please choose one file with extension is .png,.jpg,.jpeg</mat-error>
+                    </mat-card-actions>  
+                    </mat-card>
+                    
+                    <!-- <input type="file" #fileUpload id="fileUpload" name="fileUpload" multiple="multiple" accept="image/*" style="display:none;" /> -->
+                </div>
+                <div class="button-row">
+                    <button mat-raised-button color="primary" type="submit" [disabled]="service.form.invalid">Submit</button>
+                    <button mat-raised-button color="warn" (click)="onClear()" type="button">Clear</button>
+                </div>
+            </div>
+        </mat-grid-tile>
+    </mat-grid-list>
+</form>
